@@ -19,11 +19,11 @@ const (
 )
 
 type model struct {
-	state      [3]string
 	stateIndex int
+	state      [2]string
 
-	timer    timer.Model
-	duration time.Duration
+	durations [2]time.Duration
+	timer     timer.Model
 }
 
 func (m model) Init() tea.Cmd {
@@ -43,9 +43,16 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		return m, cmd
 
 	case timer.TimeoutMsg:
-		m.timer.Timeout = m.duration
-		return m, nil
+		if m.stateIndex == len(m.state)-1 {
+			m.stateIndex = 0
+		} else {
+			m.stateIndex++
+		}
 
+		m.timer.Timeout = m.durations[m.stateIndex]
+
+		return m, nil
+		// NOTE: Listen all Key Event
 	case tea.KeyMsg:
 		switch {
 		case key.Matches(msg, intKeys):
@@ -57,12 +64,10 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 }
 
 func (m model) View() string {
-	s := m.timer.View()
-
-	s += "\n"
-
 	pad := strings.Repeat(" ", padding)
-	s = "Work - " + s
+	s := m.timer.View()
+	s += "\n"
+	s = m.state[m.stateIndex] + " - " + s
 	s += "\n" + pad + "\n\n" + pad
 
 	if m.timer.Timedout() {
@@ -73,11 +78,14 @@ func (m model) View() string {
 }
 
 func main() {
-	const duration time.Duration = time.Second * 20
-	fmt.Println(duration)
+	var durations = [2]time.Duration{time.Second * 30, time.Second * 20}
+	fmt.Println(durations)
 	m := model{
-		duration: duration,
-		timer:    timer.NewWithInterval(duration, time.Second),
+		state:      [2]string{"work", "look"},
+		stateIndex: 0,
+
+		durations: durations,
+		timer:     timer.NewWithInterval(durations[0], time.Second),
 	}
 
 	if _, err := tea.NewProgram(m).Run(); err != nil {
