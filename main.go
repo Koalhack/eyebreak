@@ -12,6 +12,7 @@ import (
 	"github.com/charmbracelet/bubbles/timer"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
+	beeep "github.com/gen2brain/beeep"
 )
 
 var (
@@ -82,6 +83,9 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		m.timer.Timeout = m.durations[m.stateIndex]
 		m.passed = 0
 
+		beeep.Beep(beeep.DefaultFreq, beeep.DefaultDuration)
+		beeep.Notify(m.state[m.stateIndex], "", "")
+
 		return m, nil
 
 	case tea.WindowSizeMsg:
@@ -127,16 +131,11 @@ func (m model) View() string {
 	pad := strings.Repeat(" ", padding)
 	s := "\n" + pad + italicStyle.Render(m.state[m.stateIndex]) + " - " + boldStyle.Render(m.timer.View()) +
 		"\n\n" + pad + m.progress.View() + "\n\n" + pad + m.helpView() + "\n"
-
-	if m.timer.Timedout() {
-		s = "All done!"
-	}
-
 	return s
 }
 
 func main() {
-	var durations = [2]time.Duration{time.Second * 30, time.Second * 20}
+	var durations = [2]time.Duration{time.Second * 20, time.Second * 20}
 	m := model{
 		state:      [2]string{"Work", "Look"},
 		stateIndex: 0,
@@ -164,7 +163,7 @@ func main() {
 				key.WithHelp("q", "quit"),
 			),
 		},
-		help: help.NewModel(),
+		help: help.New(),
 	}
 	m.keymap.start.SetEnabled(false)
 
