@@ -134,7 +134,7 @@ func (m model) View() string {
 	return s
 }
 
-func main() {
+func Start() {
 	var durations = [2]time.Duration{time.Second * 20, time.Second * 20}
 	m := model{
 		state:      [2]string{"Work", "Look"},
@@ -171,5 +171,11 @@ func main() {
 		fmt.Println("Uh oh, we encountered an error:", err)
 		os.Exit(1)
 	}
+}
 
+func main() {
+	if err := rootCmd.Execute(); err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
 }
