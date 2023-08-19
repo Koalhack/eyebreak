@@ -135,7 +135,7 @@ func (m model) View() string {
 }
 
 func Start() {
-	var durations = [2]time.Duration{time.Second * 20, time.Second * 20}
+	var durations = [2]time.Duration{time.Minute * 20, time.Second * 20}
 	m := model{
 		state:      [2]string{"Work", "Look"},
 		stateIndex: 0,
