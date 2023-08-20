@@ -5,14 +5,15 @@ go 1.19
 require (
 	github.com/charmbracelet/bubbles v0.15.0
 	github.com/charmbracelet/bubbletea v0.23.2
+	github.com/charmbracelet/lipgloss v0.6.0
+	github.com/gen2brain/beeep v0.0.0-20230812223410-3e1549ef0811
+	github.com/spf13/cobra v1.7.0
 )
 
 require (
 	github.com/aymanbagabas/go-osc52 v1.2.1 // indirect
 	github.com/charmbracelet/harmonica v0.2.0 // indirect
-	github.com/charmbracelet/lipgloss v0.6.0 // indirect
 	github.com/containerd/console v1.0.3 // indirect
-	github.com/gen2brain/beeep v0.0.0-20230812223410-3e1549ef0811 // indirect
 	github.com/go-toast/toast v0.0.0-20190211030409-01e6764cf0a4 // indirect
 	github.com/godbus/dbus/v5 v5.1.0 // indirect
 	github.com/inconshreveable/mousetrap v1.1.0 // indirect
@@ -26,7 +27,6 @@ require (
 	github.com/muesli/termenv v0.14.0 // indirect
 	github.com/nu7hatch/gouuid v0.0.0-20131221200532-179d4d0c4d8d // indirect
 	github.com/rivo/uniseg v0.2.0 // indirect
-	github.com/spf13/cobra v1.7.0 // indirect
 	github.com/spf13/pflag v1.0.5 // indirect
 	github.com/tadvi/systray v0.0.0-20190226123456-11a2b8fa57af // indirect
 	golang.org/x/sync v0.1.0 // indirect
