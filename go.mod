@@ -1,4 +1,4 @@
-module EyeBreak
+module eyebreak
 
 go 1.19
 
