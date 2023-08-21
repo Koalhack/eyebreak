@@ -34,6 +34,7 @@ type model struct {
 
 	timer    timer.Model
 	progress progress.Model
+	percent  float64
 
 	keymap   keymap
 	help     help.Model
@@ -54,16 +55,14 @@ func (m model) Init() tea.Cmd {
 func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 	case timer.TickMsg:
-		var cmds []tea.Cmd
 		var cmd tea.Cmd
 
 		m.passed += m.timer.Interval
 		pct := m.passed.Milliseconds() * 100 / m.durations[m.stateIndex].Milliseconds()
-		cmds = append(cmds, m.progress.SetPercent(float64(pct)/100))
+		m.percent = float64(pct) / 100
 
 		m.timer, cmd = m.timer.Update(msg)
-		cmds = append(cmds, cmd)
-		return m, tea.Batch(cmds...)
+		return m, cmd
 
 	case timer.StartStopMsg:
 		var cmd tea.Cmd
@@ -95,11 +94,6 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		}
 		return m, nil
 
-	case progress.FrameMsg:
-		progressModel, cmd := m.progress.Update(msg)
-		m.progress = progressModel.(progress.Model)
-		return m, cmd
-
 		// NOTE: Listen all Key Event
 	case tea.KeyMsg:
 		switch {
@@ -130,7 +124,7 @@ func (m model) helpView() string {
 func (m model) View() string {
 	pad := strings.Repeat(" ", padding)
 	s := "\n" + pad + italicStyle.Render(m.state[m.stateIndex]) + " - " + boldStyle.Render(m.timer.View()) +
-		"\n\n" + pad + m.progress.View() + "\n\n" + pad + m.helpView() + "\n"
+		"\n\n" + pad + m.progress.ViewAs(m.percent) + "\n\n" + pad + m.helpView() + "\n"
 	return s
 }
 
